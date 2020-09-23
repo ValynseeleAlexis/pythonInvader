@@ -13,6 +13,8 @@ class Ship:
 
         # Place the ship initially on midbottom of the screen 
         self.rect.midbottom = self.screen_rect.midbottom
+        self.height = self.rect.y
+        self.width = self.rect.x
 
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
@@ -40,5 +42,5 @@ class Ship:
         self.rect.y = self.y
     
     # redraw the ship to the screen 
-    def blitme(self):
+    def draw_ship(self):
         self.screen.blit(self.image, self.rect)

@@ -3,6 +3,7 @@ import pygame
 import settings
 import ship
 import bullet
+import alien
 
 
 class game:
@@ -26,6 +27,11 @@ class game:
 
         # Setting a sprite group to handle bullets
         self.bullets = pygame.sprite.Group()
+        # Setting a sprite group to handle aliens
+        self.aliens = pygame.sprite.Group()
+
+        #Setting an alien fleet
+        self.create_fleet()
 
     # Method that listen to all events in the game
     def check_events(self):
@@ -73,18 +79,18 @@ class game:
     def update_screen(self):
         self.screen.fill(self.settings.bg_color) # Fill the background with color 
         self.screen.blit(self.bg,(0,0)) #Draw the bg on the screen 
-        self.ship.blitme() #redraw ship on the screen
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
-        pygame.display.flip()
+        self.ship.draw_ship() #redraw ship on the screen
+        self.bullets.draw(self.screen) #redraw all bullets from the sprite group
+        self.aliens.draw(self.screen) #redraw all aliens from the sprite group
+        pygame.display.flip() #update the screen
 
     def run_game(self):
         # start game loop
         while True:
-            self.check_events()
-            self.ship.update()
-            self.update_bullets()
-            self.update_screen()
+            self.check_events() # listen to keyboard events
+            self.ship.update() # update ship coordinates
+            self.update_bullets() # update bullets coordinates
+            self.update_screen() # update display
 
     #Game methods
 
@@ -97,14 +103,36 @@ class game:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom < 0:
                 self.bullets.remove(bullet)
-        print(len(self.bullets))
+        # print(len(self.bullets)) --DEBUG
 
     def update_bullets(self):
         #Update the position of the bullets and delete old bullets
         self.bullets.update()
         self.delete_bullet()
 
+    def create_fleet(self):
+        new_alien = alien.Alien(self)
+        # self.aliens.add(new_alien)
+        available_space_x = self.settings.screen_width - (2 * new_alien.width)
+        number_aliens_x = available_space_x // (2 * new_alien.width)
+
+        available_space_y = (self.settings.screen_height + (7 * new_alien.height) - self.ship.height)
+        number_rows = available_space_y // (2 * new_alien.height)
+
+        for row_number in range(number_rows):
+            for n in range(number_aliens_x):
+                self.create_alien(n,row_number)
+
+    def create_alien(self,n,row_number):
+        new_alien = alien.Alien(self)
+        new_alien.x = new_alien.width + 2 * new_alien.width * n
+        new_alien.rect.x = new_alien.x
+        new_alien.rect.y = new_alien.rect.height + 2 * new_alien.rect.height * row_number
+        self.aliens.add(new_alien)
+
+
     # Other game methods
+    
     def to_fullscren(self):
         self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width

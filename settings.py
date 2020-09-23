@@ -20,3 +20,6 @@ class Settings:
         self.bullet_height = 15
         self.bullet_color = (60, 60, 60)
         self.max_bullets_allowed = 15
+
+        # Alien settings
+        self.alien_sprite = "./assets/alien.bmp"
