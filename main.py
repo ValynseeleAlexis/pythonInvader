@@ -48,6 +48,7 @@ class game:
             self.ship.update() # update ship coordinates
             self.update_aliens() # Update aliens to make them move
             self.update_bullets() # update bullets coordinates
+            self.update_collisions() # Check for collisions
             self.update_screen() # update display
 
     # Method that listen to all events in the game
@@ -110,9 +111,7 @@ class game:
         #Update the position of the bullets and delete old bullets
         self.bullets.update()
         self.delete_bullet()
-        # check for collisions between bullets and aliens sprites, if so delete both 
-        collisions = pygame.sprite.pygame.sprite.groupcollide(self.bullets,self.aliens, True,True)
-
+        self.repop_fleet()
 
     def create_fleet(self):
         new_alien = alien.Alien(self)
@@ -145,9 +144,22 @@ class game:
             currentAlien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
 
+    def repop_fleet(self):
+        if not self.aliens:
+            self.bullets.empty()
+            self.create_fleet()
+
     def update_aliens(self):
         self.check_fleet_edges()
         self.aliens.update()
+
+    def update_collisions(self):
+        # check for collisions between bullets and aliens sprites, if so delete both 
+        collisions = pygame.sprite.pygame.sprite.groupcollide(self.bullets,self.aliens, True,True)
+
+        # Handle collision with the player 
+        if pygame.sprite.pygame.sprite.spritecollideany(self.ship,self.aliens):
+            print("Game Over\n")
 
     # Other game methods
     

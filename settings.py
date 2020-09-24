@@ -15,11 +15,11 @@ class Settings:
 
         # Bullet settings
         self.bullet_sprite = "./assets/bullet.bmp"
-        self.bullet_speed = 2.5
+        self.bullet_speed = 5.0
         self.bullet_width = 15
         self.bullet_height = 15
         self.bullet_color = (60, 60, 60)
-        self.max_bullets_allowed = 15
+        self.max_bullets_allowed = 3
 
         # Alien settings
         self.alien_sprite = "./assets/alien.bmp"
