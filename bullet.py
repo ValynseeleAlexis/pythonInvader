@@ -15,6 +15,9 @@ class Bullet(Sprite):
         # Making a rectangle for the bullet either with pure rect or a bmp file
         self.image = pygame.image.load(self.settings.bullet_sprite)
         self.rect = self.image.get_rect()
+        #self.rect.width = self.settings.bullet_width
+        #self.rect.height = self.settings.bullet_height
+
        
         # self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
         self.rect.midtop = game.ship.rect.midtop
